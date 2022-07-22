@@ -4,7 +4,7 @@ from torch.nn import functional as F
 import numpy as np
 from config import *
 import skimage.io as io
-from src.dataset.uv_face import face_mask_np, face_mask_fix_rate, foreface_ind, uv_kpt_ind, uv_edges, uv_triangles
+from src.dataset.uv_face import face_mask_np, face_mask_fix_rate, foreface_ind, uv_kpt_ind, uv_edges, get_uv_triangles
 
 weight_mask_np = io.imread(FACE_WEIGHT_MASK_PATH).astype(float)
 weight_mask_np[weight_mask_np == 255] = 256
@@ -158,7 +158,7 @@ class EdgeLengthLoss(nn.Module):
 
 
 class NormalVectorLoss(nn.Module):
-    def __init__(self, triangles=uv_triangles):
+    def __init__(self, triangles=get_uv_triangles()):
         super(NormalVectorLoss, self).__init__()
         """
         triangles=[[x1,y1,x2,y2,x3,y3]]

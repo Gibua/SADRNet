@@ -4,6 +4,9 @@ from PIL import Image
 from config import *
 import trimesh
 import os
+import numpy as np
+
+# This file was modified from the source.
 
 face_mask_np = np.array(Image.open(UV_FACE_MASK_PATH)) / 255.
 face_mask_fix_rate = (UV_MAP_SIZE ** 2) / np.sum(face_mask_np)
@@ -158,4 +161,4 @@ def get_uv_triangles():
                         triangles.append([i, j, i, j + 1, i - 1, j + 1])
 
     # np.save('data/uv_data/uv_triangles.npy', triangles)
-    return triangles
+    return np.array(triangles)
