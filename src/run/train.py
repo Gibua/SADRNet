@@ -13,6 +13,8 @@ import config
 from src.configs.config_SADRN_v2 import *
 import torch.optim as optim
 
+sys.path.append(os.path.abspath('../'))
+
 from torch.optim.lr_scheduler import _LRScheduler
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from src.dataset.dataloader import make_data_loader, make_dataset
