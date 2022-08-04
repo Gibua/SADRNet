@@ -9,6 +9,8 @@ from src.model.loss import *
 from PIL import Image
 import matplotlib.pyplot as plt
 
+from src.dataset.dataloader import img_to_tensor, uv_map_to_tensor
+
 
 class BasePredictor:
     def __init__(self, weight_path):
@@ -39,17 +41,12 @@ class SADRNPredictor(BasePredictor):
 
     def predict(self, img):
         # TODO normalize
-        image = (img / 255.0).astype(np.float32)
-        for ii in range(3):
-            image[:, :, ii] = (image[:, :, ii] - image[:, :, ii].mean()) / np.sqrt(
-                image[:, :, ii].var() + 0.001)
-        image = img_to_tensor(image).to(config.DEVICE).float().unsqueeze(0)
         with torch.no_grad():
             out = self.model({'img': image}, {}, 'predict')
-        out['face_uvm'] *= config.POSMAP_FIX_RATE
+        #out['face_uvm'] *= config.POSMAP_FIX_RATE
         out['kpt_uvm'] *= config.POSMAP_FIX_RATE
 
-        out['face_uvm'] = out['face_uvm'].cpu().permute(0, 2, 3, 1).numpy()[0]
+        #out['face_uvm'] = out['face_uvm'].cpu().permute(0, 2, 3, 1).numpy()[0]
         out['kpt_uvm'] = out['kpt_uvm'].cpu().permute(0, 2, 3, 1).numpy()[0]
         out['offset_uvm'] = out['offset_uvm'].cpu().permute(0, 2, 3, 1).numpy()[0]
         out['attention_mask'] = out['attention_mask'].cpu().permute(0, 2, 3, 1).numpy()[0]
